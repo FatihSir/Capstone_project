@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kidney Classification System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .preview {
+            margin-top: 20px;
+            position: relative;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 128px; /* Adjusted max-height */
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            display: none;
+            margin: 0 auto;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kidney Classification System</h1>
+
+        <form class="form-group" action="/" method="post" enctype="multipart/form-data">
+            <input class="form-control" type="file" name="imagefile" id="imagefile" accept="image/*" required>
+            <button class="btn" type="submit">Predict Image</button>
+        </form>
+
+        <div class="preview">
+            <h2>Image Preview</h2>
+            <img id="image-preview" src="#" alt="Image Preview">
+            {% if heatmap %}
+                <img id="heatmap-preview" src="{{ heatmap }}" alt="Grad-CAM Heatmap" style="display: block;">
+            {% else %}
+                <img id="heatmap-preview" src="#" alt="Grad-CAM Heatmap">
+            {% endif %}
+        </div>
+
+        {% if prediction %}
+            <p class="result">{{ prediction }}</p>
+        {% endif %}
+
+        <script>
+            document.getElementById('imagefile').addEventListener('change', function(event) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const img = document.getElementById('image-preview');
+                    img.src = reader.result;
+                    img.style.display = 'block';
+                    document.getElementById('heatmap-preview').style.display = 'none';
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            });
+        </script>
+    </div>
+
+    <div class="footer">
+        The system is developed by MOHAMEDALFATEH T. M. SAEED
+    </div>
+</body>
+</html>
